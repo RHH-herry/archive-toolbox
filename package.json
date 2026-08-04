@@ -37,7 +37,8 @@
       "perMachine": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
-      "shortcutName": "归档"
+      "shortcutName": "归档",
+      "installerLanguages": ["zh_CN"]
     }
   },
   "devDependencies": {

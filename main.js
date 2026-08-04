@@ -85,9 +85,10 @@ function createMain() {
     center: true,
     frame: false,
     show: false,
-    // 透明窗口 + 前端圆角外壳（.window 圆角 + 无投影），Windows 下无原生阴影
-    transparent: true,
-    backgroundColor: '#00000000',
+    // 不透明窗口：保证所有机器都能稳定渲染（透明窗口在部分显卡上会黑屏/无法操作）。
+    // 阴影垫已通过 CSS 去掉（.window 无 box-shadow）；hasShadow:false 关掉原生矩形阴影。
+    transparent: false,
+    backgroundColor: '#fdfeff',
     hasShadow: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
