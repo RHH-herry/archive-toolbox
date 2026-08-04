@@ -116,6 +116,8 @@
     document.body.classList.toggle('maximized', !!max);
     const tip = document.getElementById('maxTip');
     if (tip) tip.textContent = max ? '还原' : '最大化';
+    const btn = document.getElementById('btnMax');
+    if (btn) btn.setAttribute('aria-label', max ? '还原' : '最大化');
   }
   if (isElectron && window.electronAPI.onMaximizedChange) {
     window.electronAPI.onMaximizedChange((s) => applyMaximized(s && s.maximized));
