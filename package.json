@@ -8,7 +8,8 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "pack": "electron-builder --dir"
+    "pack": "electron-builder --dir",
+    "test": "node test/functional.js"
   },
   "build": {
     "appId": "com.archive.tool",
@@ -38,11 +39,14 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "shortcutName": "归档",
-      "installerLanguages": ["zh_CN"]
+      "installerLanguages": [
+        "zh_CN"
+      ]
     }
   },
   "devDependencies": {
     "electron": "^33.0.0",
-    "electron-builder": "^25.0.0"
+    "electron-builder": "^25.0.0",
+    "jsdom": "^30.0.1"
   }
 }
