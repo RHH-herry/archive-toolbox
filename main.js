@@ -6,7 +6,7 @@ let mainWin = null;
 let splashShownAt = 0;
 let mainRevealed = false;
 
-const SPLASH_MIN_MS = 1500; // 启动动画最短展示时长（毫秒）
+const SPLASH_MIN_MS = 2400; // 启动动画最短展示时长（毫秒）——不要太快，看清动画
 const FORCE_SHOW_MS = 6000;  // 无论加载如何，超时强制显示主窗口
 
 /* 性能说明：不在此禁用硬件加速——真机有 GPU 时渲染更流畅。
