@@ -13,11 +13,17 @@
   - 读取 `.zip`，树形浏览、搜索筛选、勾选部分或全部解压
   - 优先使用 File System Access API **直接写入你选择的系统文件夹**；不支持时自动回退为逐一下载
   - 可选解压到以压缩包命名的子文件夹
+- **校验**：MD5 / SHA-1 / SHA-256 / SHA-512，验证归档完整性
+- **拆分 / 合并**：大文件拆成分卷（10/50/100/500 MB），按序号合并还原
 - **最近记录**：本地保存最近的压缩 / 解压任务，可一键回到对应功能
 - **主题**：浅色 / 深色一键切换，记忆偏好
-- **交互**：macOS 风格窗口控制（关闭 / 最小化 / 全屏）、拖放高亮、流光进度条、Toast 提示
+- **窗口（桌面版）**：macOS 风格左侧红绿灯（关闭 / 最小化 / 最大化还原），整窗圆角无阴影垫，悬停提示，最大化自动去圆角
 
-## 用法
+## 安装（Windows 桌面版）
+
+下载安装包 `归档-1.0.0-setup.exe`（Release 页），运行后按向导安装即可。安装版自带启动动画与开始菜单 / 桌面快捷方式。
+
+## 网页版用法
 
 直接**双击 `index.html`** 在现代浏览器（Chrome / Edge / Firefox / Safari）打开即可。无需安装、无需联网。
 
@@ -30,4 +36,4 @@
 
 ## 技术
 
-纯静态 HTML / CSS / JS + [JSZip](https://stuk.github.io/jszip/)（本地 `vendor/jszip.min.js` 引入，无外部 CDN）。无构建步骤，无运行时依赖。
+纯静态 HTML / CSS / JS + [JSZip](https://stuk.github.io/jszip/)（本地 `vendor/jszip.min.js` 引入，无外部 CDN）。桌面版基于 Electron 33 + electron-builder（NSIS 安装包）。
