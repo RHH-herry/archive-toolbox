@@ -1,4 +1,4 @@
-/* ===== 液态玻璃启动画面 — iPhone Liquid Glass 95% ===== */
+/* ===== 液态玻璃启动画面 — 圆角玻璃面，无外部阴影/垫 ===== */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
@@ -12,7 +12,7 @@ html, body {
   -webkit-app-region: drag;
 }
 
-/* === 主体容器：液态玻璃（更实） === */
+/* === 主体容器：液态玻璃（更实、更干净） === */
 .liquid-glass {
   position: relative;
   width: 100%; height: 100%;
@@ -20,7 +20,6 @@ html, body {
   border-radius: 28px;
   overflow: hidden;
 
-  /* 液态玻璃：更实、更干净 */
   background:
     radial-gradient(ellipse 80% 60% at 20% 15%, rgba(160,200,245,0.55), transparent 60%),
     radial-gradient(ellipse 70% 50% at 80% 85%, rgba(120,210,190,0.35), transparent 55%),
@@ -35,6 +34,7 @@ html, body {
   backdrop-filter: blur(30px) saturate(1.6);
   -webkit-backdrop-filter: blur(30px) saturate(1.6);
 
+  /* 只保留内部高光，无外部投影 */
   box-shadow:
     inset 0 0 0 0.5px rgba(255,255,255,0.7),
     inset 0 1px 0 rgba(255,255,255,0.8),
@@ -201,5 +201,3 @@ html, body {
   transition: opacity 0.2s ease;
   margin-top: 4px;
 }
-
-/* 无底部边缘光 — 干干净净只有圆面 */

@@ -6,13 +6,13 @@ let mainWin = null;
 let splashShownAt = 0;
 let mainRevealed = false;
 
-const SPLASH_MIN_MS = 1900; // 启动动画最短展示时长（毫秒）
+const SPLASH_MIN_MS = 1500; // 启动动画最短展示时长（毫秒）
 const FORCE_SHOW_MS = 6000;  // 无论加载如何，超时强制显示主窗口
 
-/* 性能说明：不在此禁用硬件加速——真机有 GPU 时硬件加速显著提升渲染流畅度。
+/* 性能说明：不在此禁用硬件加速——真机有 GPU 时渲染更流畅。
    仅当在无桌面/虚拟机会话（headless）中调试时，用命令行参数 --disable-gpu 临时关闭。 */
 
-/* ---------------- 启动动画窗口 ---------------- */
+/* ---------------- 启动动画窗口（透明，圆角玻璃面，无阴影垫） ---------------- */
 function createSplash() {
   splashShownAt = Date.now();
   splashWin = new BrowserWindow({
@@ -24,7 +24,6 @@ function createSplash() {
     show: false,
     skipTaskbar: true,
     center: true,
-    // 透明窗口 + splash 内圆角卡片；hasShadow:false 避免 Windows 原生矩形阴影
     transparent: true,
     backgroundColor: '#00000000',
     hasShadow: false,
@@ -54,7 +53,7 @@ function dismissSplash() {
   splashWin = null;
 }
 
-/* 主窗口就绪后：保证 splash 展示满最短时长 → 淡出 → 显示主窗口 */
+/* 主窗口就绪后：保证动画展示满最短时长 → 淡出 → 显示主窗口 */
 function revealMain() {
   if (mainRevealed) return;
   mainRevealed = true;
@@ -71,10 +70,10 @@ function revealMain() {
     if (mainWin.isDestroyed()) return;
     mainWin.show();
     mainWin.focus();
-  }, Math.max(wait, 300) + 500); // +500ms 给 splash 淡出动画留时间
+  }, Math.max(wait, 300) + 500); // +500ms 给淡出动画留时间
 }
 
-/* ---------------- 主窗口 ---------------- */
+/* ---------------- 主窗口：透明 + 圆角外壳，下面不垫任何东西 ---------------- */
 function createMain() {
   mainWin = new BrowserWindow({
     title: '归档',
@@ -85,10 +84,9 @@ function createMain() {
     center: true,
     frame: false,
     show: false,
-    // 不透明窗口：保证所有机器都能稳定渲染（透明窗口在部分显卡上会黑屏/无法操作）。
-    // 阴影垫已通过 CSS 去掉（.window 无 box-shadow）；hasShadow:false 关掉原生矩形阴影。
-    transparent: false,
-    backgroundColor: '#fdfeff',
+    // 透明窗口 + 前端圆角外壳（.window 圆角 + 无投影）→ 真正"只要圆角、下面无垫"
+    transparent: true,
+    backgroundColor: '#00000000',
     hasShadow: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -105,7 +103,7 @@ function createMain() {
   mainWin.on('maximize', sendMaxState);
   mainWin.on('unmaximize', sendMaxState);
 
-  // IPC: 窗口控制（按发送者所在窗口定位，多窗口更稳）
+  // 窗口控制
   ipcMain.on('win:min', (e) => e.sender.getOwnerBrowserWindow().minimize());
   ipcMain.on('win:max', (e) => {
     const w = e.sender.getOwnerBrowserWindow();

@@ -81,19 +81,16 @@ html, body {
   -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
 }
 body {
-  display: flex; align-items: center; justify-content: center;
-  padding: clamp(10px, 3vw, 28px); overflow: hidden; position: relative;
-  /* 不透明窗口：背景渐变撑住圆角外壳，无阴影垫 */
-  background:
-    radial-gradient(120% 120% at 18% 12%, rgba(10,132,255,0.05), transparent 55%),
-    radial-gradient(120% 120% at 85% 88%, rgba(52,199,89,0.045), transparent 50%),
-    linear-gradient(160deg, var(--bg-1), var(--bg-2));
+  /* 透明背景：圆角窗口外壳直接透出桌面，下面不垫任何东西 */
+  background: transparent;
+  overflow: hidden;
+  position: relative;
 }
 
 /* ===== 窗口 ===== */
 .window {
   position: relative; z-index: 1;
-  width: min(960px, 100%); height: min(680px, 100%);
+  width: 100%; height: 100vh;
   background: var(--win-bg);
   border-radius: var(--r-win);
   /* 无外部投影：去掉窗口下方/四周的阴影垫 */
@@ -101,9 +98,8 @@ body {
   border: 0.5px solid var(--stroke-strong);
   transition: opacity .25s ease, transform .25s ease;
 }
-/* 最大化：铺满屏幕，去掉圆角与留边 */
-body.maximized { padding: 0; }
-body.maximized .window { width: 100%; height: 100vh; border-radius: 0; border-color: var(--stroke); }
+/* 最大化：铺满屏幕，去掉圆角与描边 */
+body.maximized .window { border-radius: 0; border-color: var(--stroke); }
 .window::before { /* 顶部高光 */
   content: ""; position: absolute; inset: 0 0 auto 0; height: 1.5px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent);
@@ -555,7 +551,6 @@ body.maximized .light .ico-restore { display: inline-flex; align-items: center; 
 
 /* 超窄窗口（< 480px）：进一步收紧 */
 @media (max-width: 480px) {
-  body { padding: 8px; }
   .window { height: 100%; }
   .titlebar { padding: 0 10px; }
   .content { padding: 14px 12px; }

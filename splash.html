@@ -47,7 +47,6 @@
     ];
 
     let hintIdx = 0;
-    let prevPct = 0;
 
     window.electronAPI.onSplashProgress((pct) => {
       const fill = document.getElementById('barFill');
@@ -58,7 +57,6 @@
       fill.style.width = p + '%';
       pctEl.textContent = p + '%';
 
-      // 更新提示文字
       const newIdx = Math.min(Math.floor(p / 25), hints.length - 1);
       if (newIdx !== hintIdx) {
         hintIdx = newIdx;

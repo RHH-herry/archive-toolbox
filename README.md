@@ -21,7 +21,9 @@
 
 ## 安装（Windows 桌面版）
 
-下载安装包 `归档-1.0.0-setup.exe`（Release 页），运行后按向导安装即可。安装版自带启动动画与开始菜单 / 桌面快捷方式。
+- **安装包**（NSIS 向导式，全中文）：[ArchiveTool-Setup-1.0.0.exe](https://github.com/RHH-herry/archive-toolbox/releases/download/v1.0.0/ArchiveTool-Setup-1.0.0.exe)（即「归档-1.0.0-setup.exe」，GitHub 资产名不支持中文故用英文名）
+- 或到 [Releases 页](https://github.com/RHH-herry/archive-toolbox/releases) 查看所有版本
+- 安装后含开始菜单 / 桌面快捷方式，可卸载；用户数据保留在本地
 
 ## 网页版用法
 
@@ -37,3 +39,7 @@
 ## 技术
 
 纯静态 HTML / CSS / JS + [JSZip](https://stuk.github.io/jszip/)（本地 `vendor/jszip.min.js` 引入，无外部 CDN）。桌面版基于 Electron 33 + electron-builder（NSIS 安装包）。
+
+## 许可证
+
+[MIT](LICENSE) © 2026 RHH-herry
