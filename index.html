@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>归档 · 压缩与解压</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="window" id="window">
+    <!-- macOS 风格标题栏 -->
+    <header class="titlebar">
+      <div class="traffic">
+        <button class="light red"    id="btnClose" aria-label="关闭">
+          <span>×</span>
+          <span class="light-label">关闭</span>
+        </button>
+        <button class="light yellow" id="btnMin"   aria-label="最小化">
+          <span>−</span>
+          <span class="light-label">最小化</span>
+        </button>
+        <button class="light green"  id="btnMax"   aria-label="最大化">
+          <span class="ico-max">+</span>
+          <span class="ico-restore"><svg viewBox="0 0 10 10" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><rect x="1.2" y="3" width="5.8" height="5.8" rx="1"/><path d="M3 3V1.4h5.6V7H7"/></svg></span>
+          <span class="light-label" id="maxTip">最大化</span>
+        </button>
+      </div>
+      <div class="title">归档</div>
+      <div class="titlebar-actions">
+        <button class="icon-btn" id="themeToggle" title="切换外观" aria-label="切换外观">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.39 5.39 0 0 1-8.54-8.54A9.2 9.2 0 0 0 12 3Z" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="body">
+      <!-- 侧栏 -->
+      <aside class="sidebar">
+        <div class="sidebar-title">归档工具</div>
+        <nav class="nav">
+          <button class="nav-item active" data-mode="home">
+            <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg></span><span>首页</span>
+          </button>
+          <button class="nav-item" data-mode="compress">
+            <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v6"/></svg></span><span>压缩</span>
+          </button>
+          <button class="nav-item" data-mode="extract">
+            <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></span><span>解压</span>
+          </button>
+          <button class="nav-item" data-mode="checksum">
+            <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 8.6-7 10-4-1.4-7-5.4-7-10V6z"/><path d="M9.2 12.2l2 2 3.6-3.8"/></svg></span><span>校验</span>
+          </button>
+          <button class="nav-item" data-mode="split">
+            <span class="nav-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M20 5L9.5 15.4M20 19L9.5 8.6M14.6 9.4l2.2-2.2"/></svg></span><span>拆分合并</span>
+          </button>
+        </nav>
+        <div class="sidebar-foot">
+          <div class="sf-tip">支持 ZIP · 纯本地处理<br/>文件不会上传任何服务器</div>
+        </div>
+      </aside>
+
+      <!-- 主内容 -->
+      <main class="content">
+
+        <!-- 首屏 -->
+        <section id="view-home" class="view active">
+          <div class="home">
+            <div class="app-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v6"/></svg>
+            </div>
+            <h1 class="home-title">归档</h1>
+            <p class="home-sub">本地压缩与解压 · 文件不会上传任何服务器</p>
+            <div class="home-cards">
+              <button class="hero-card" data-go="compress">
+                <span class="hc-ico hc-compress"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 40h36v6a4 4 0 01-4 4H18a4 4 0 01-4-4z"/><path d="M32 8v26"/><path d="M22 22l10 10 10-10"/></svg></span>
+                <span class="hc-title">压缩文件</span>
+                <span class="hc-desc">拖入文件或文件夹，打包成 .zip</span>
+                <span class="hc-arrow">开始 →</span>
+              </button>
+              <button class="hero-card" data-go="extract">
+                <span class="hc-ico hc-extract"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 46h36v-6a4 4 0 00-4-4H18a4 4 0 00-4 4z"/><path d="M32 40V14"/><path d="M22 26l10-10 10 10"/></svg></span>
+                <span class="hc-title">解压压缩包</span>
+                <span class="hc-desc">读取 .zip，解压到指定文件夹</span>
+                <span class="hc-arrow">开始 →</span>
+              </button>
+              <button class="hero-card" data-go="checksum">
+                <span class="hc-ico hc-checksum"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6l20 8v14c0 12-8 22-20 26-12-4-20-14-20-26V14z"/><path d="M24 32l6 6 11-12"/></svg></span>
+                <span class="hc-title">校验文件</span>
+                <span class="hc-desc">MD5 / SHA 校验值，验证归档完整性</span>
+                <span class="hc-arrow">开始 →</span>
+              </button>
+              <button class="hero-card" data-go="split">
+                <span class="hc-ico hc-split"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="6"/><circle cx="16" cy="48" r="6"/><path d="M52 10L26 36M52 54L26 28M38 24l6-6"/></svg></span>
+                <span class="hc-title">拆分 / 合并</span>
+                <span class="hc-desc">大文件拆成分卷，或合并还原</span>
+                <span class="hc-arrow">开始 →</span>
+              </button>
+            </div>
+            <div class="recent" id="recent">
+              <div class="recent-label">最近</div>
+              <div class="recent-list" id="recentList"></div>
+            </div>
+            <p class="home-foot">支持 ZIP 格式 · 纯本地处理</p>
+          </div>
+        </section>
+
+        <!-- 压缩视图 -->
+        <section id="view-compress" class="view">
+          <div class="view-head">
+            <h2>压缩</h2>
+            <p>将文件或文件夹打包为 .zip</p>
+          </div>
+          <div class="dropzone" id="dropCompress">
+            <div class="drop-ico"><svg class="illo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 40h36v6a4 4 0 01-4 4H18a4 4 0 01-4-4z"/><path d="M32 8v26"/><path d="M22 22l10 10 10-10"/></svg></div>
+            <div class="drop-title">拖入文件或文件夹进行压缩</div>
+            <div class="drop-sub">或
+              <button class="link" id="pickFiles">选择文件</button> ·
+              <button class="link" id="pickDir">选择文件夹</button>
+            </div>
+            <input type="file" id="fileInput" multiple hidden />
+            <input type="file" id="dirInput" webkitdirectory multiple hidden />
+          </div>
+
+          <div class="options">
+            <label class="opt">
+              <span class="opt-label">压缩级别</span>
+              <div class="segment" id="levelSeg">
+                <button type="button" data-v="0">无</button>
+                <button type="button" data-v="1">快速</button>
+                <button type="button" data-v="6" class="active">标准</button>
+                <button type="button" data-v="9">最大</button>
+              </div>
+            </label>
+            <label class="opt">
+              <span class="opt-label">文件名</span>
+              <div class="name-field">
+                <input id="zipName" class="input" value="archive" />
+                <span class="ext">.zip</span>
+              </div>
+            </label>
+            <div class="opt opt-actions">
+              <button class="btn-mini" id="estimateBtn">分析体积</button>
+            </div>
+          </div>
+
+          <div class="estimate" id="estimate" hidden></div>
+
+          <div class="filelist" id="compressList"></div>
+
+          <div class="actionbar">
+            <span class="info" id="compressInfo">尚未添加文件</span>
+            <button class="btn-primary" id="compressBtn" disabled>压缩</button>
+          </div>
+
+          <div class="progress" id="compressProgress" hidden>
+            <div class="progress-bar"><div class="progress-fill" id="compressFill"></div></div>
+            <span class="progress-text" id="compressPct">0%</span>
+          </div>
+        </section>
+
+        <!-- 解压视图 -->
+        <section id="view-extract" class="view">
+          <div class="view-head">
+            <h2>解压</h2>
+            <p>读取 .zip 压缩包，解压到指定文件夹</p>
+          </div>
+          <div class="dropzone" id="dropExtract">
+            <div class="drop-ico"><svg class="illo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 46h36v-6a4 4 0 00-4-4H18a4 4 0 00-4 4z"/><path d="M32 40V14"/><path d="M22 26l10-10 10 10"/></svg></div>
+            <div class="drop-title">拖入 .zip 压缩包进行解压</div>
+            <div class="drop-sub">或 <button class="link" id="pickZip">选择压缩包</button></div>
+            <input type="file" id="zipInput" accept=".zip,application/zip" hidden />
+          </div>
+
+          <div class="archive-head" id="archiveHead" hidden>
+            <div class="ah-info">
+              <div class="ah-name" id="archiveName">—</div>
+              <div class="ah-meta" id="archiveMeta">—</div>
+            </div>
+            <div class="ah-actions">
+              <button class="btn-ghost" id="extractSel">解压选中</button>
+              <button class="btn-primary" id="extractAll">全部解压</button>
+            </div>
+          </div>
+
+          <div class="toolbar" id="extractToolbar" hidden>
+            <div class="search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+              <input id="searchInput" placeholder="筛选文件…" />
+            </div>
+            <label class="switch-row">
+              <span class="switch"><input type="checkbox" id="subfolderToggle" /><span class="track"></span></span>
+              解压到 <span id="subfolderName">archive</span> 子文件夹
+            </label>
+          </div>
+
+          <div class="filelist tree" id="extractList"></div>
+
+          <div class="progress" id="extractProgress" hidden>
+            <div class="progress-bar"><div class="progress-fill" id="extractFill"></div></div>
+            <span class="progress-text" id="extractPct">0%</span>
+          </div>
+        </section>
+
+        <!-- 校验视图 -->
+        <section id="view-checksum" class="view">
+          <div class="view-head">
+            <h2>校验</h2>
+            <p>计算文件的 MD5 / SHA 校验值，用于验证压缩包与归档的完整性</p>
+          </div>
+          <div class="dropzone" id="dropHash">
+            <div class="drop-ico"><svg class="illo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6l20 8v14c0 12-8 22-20 26-12-4-20-14-20-26V14z"/><path d="M24 32l6 6 11-12"/></svg></div>
+            <div class="drop-title">拖入文件或压缩包</div>
+            <div class="drop-sub">或 <button class="link" id="pickHash">选择文件</button></div>
+            <input type="file" id="hashInput" multiple hidden />
+          </div>
+          <div class="options">
+            <label class="opt">
+              <span class="opt-label">算法</span>
+              <div class="segment" id="hashAlgSeg">
+                <button type="button" data-v="md5" class="active">MD5</button>
+                <button type="button" data-v="sha1">SHA-1</button>
+                <button type="button" data-v="sha256">SHA-256</button>
+                <button type="button" data-v="sha512">SHA-512</button>
+              </div>
+            </label>
+          </div>
+          <div class="filelist hash-list" id="hashList"></div>
+        </section>
+
+        <!-- 拆分 / 合并视图 -->
+        <section id="view-split" class="view">
+          <div class="view-head">
+            <h2>拆分 / 合并</h2>
+            <p>将大文件拆成多个分卷便于传输，或把分卷合并还原</p>
+          </div>
+          <div class="toolbar">
+            <div class="segment" id="splitModeSeg">
+              <button type="button" data-v="split" class="active">拆分大文件</button>
+              <button type="button" data-v="merge">合并分卷</button>
+            </div>
+          </div>
+
+          <div id="splitPanel">
+            <div class="dropzone" id="dropSplit">
+              <div class="drop-ico"><svg class="illo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6v34"/><path d="M32 40l-10-10M32 40l10-10"/><path d="M12 48h40"/><circle cx="32" cy="53" r="4" fill="currentColor" stroke="none"/></svg></div>
+              <div class="drop-title">拖入要拆分的大文件</div>
+              <div class="drop-sub">或 <button class="link" id="pickSplit">选择文件</button></div>
+              <input type="file" id="splitInput" hidden />
+            </div>
+            <div class="options">
+              <label class="opt">
+                <span class="opt-label">分卷大小</span>
+                <div class="segment" id="splitSizeSeg">
+                  <button type="button" data-v="10485760">10 MB</button>
+                  <button type="button" data-v="52428800" class="active">50 MB</button>
+                  <button type="button" data-v="104857600">100 MB</button>
+                  <button type="button" data-v="524288000">500 MB</button>
+                </div>
+              </label>
+            </div>
+            <div class="filelist" id="splitList"></div>
+            <div class="actionbar">
+              <span class="info" id="splitInfo">尚未选择文件</span>
+              <button class="btn-primary" id="splitBtn" disabled>开始拆分</button>
+            </div>
+            <div class="progress" id="splitProgress" hidden>
+              <div class="progress-bar"><div class="progress-fill" id="splitFill"></div></div>
+              <span class="progress-text" id="splitPct">0%</span>
+            </div>
+          </div>
+
+          <div id="mergePanel" hidden>
+            <div class="dropzone" id="dropMerge">
+              <div class="drop-ico"><svg class="illo" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M32 40V6"/><path d="M32 40l-10-10M32 40l10-10"/><path d="M12 48h40"/><circle cx="32" cy="53" r="4" fill="currentColor" stroke="none"/></svg></div>
+              <div class="drop-title">拖入全部分卷</div>
+              <div class="drop-sub">自动按「.part.001」序号排序 · 或 <button class="link" id="pickMerge">选择文件</button></div>
+              <input type="file" id="mergeInput" multiple hidden />
+            </div>
+            <div class="filelist" id="mergeList"></div>
+            <div class="actionbar">
+              <span class="info" id="mergeInfo">尚未选择分卷</span>
+              <button class="btn-primary" id="mergeBtn" disabled>合并还原</button>
+            </div>
+            <div class="progress" id="mergeProgress" hidden>
+              <div class="progress-bar"><div class="progress-fill" id="mergeFill"></div></div>
+              <span class="progress-text" id="mergePct">0%</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="vendor/jszip.min.js"></script>
+  <script src="vendor/hash.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

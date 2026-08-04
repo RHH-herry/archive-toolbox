@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>归档 · 启动</title>
+  <link rel="stylesheet" href="splash.css" />
+</head>
+<body>
+  <div class="liquid-glass" id="splash">
+    <!-- 背景光晕 -->
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+
+    <!-- 内容 -->
+    <div class="splash-content">
+      <div class="splash-icon-wrap">
+        <div class="splash-icon">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M8 18l24-12 24 12-24 12-24-12z"/>
+            <path d="M8 18v28l24 12 24-12V18"/>
+            <path d="M32 32v16"/>
+            <path d="M24 26l8-4 8 4"/>
+          </svg>
+        </div>
+      </div>
+      <h1 class="splash-title">归档</h1>
+      <p class="splash-sub">本地压缩与解压工具</p>
+      <div class="splash-bar-wrap">
+        <div class="splash-bar-track">
+          <div class="splash-bar-fill" id="barFill"></div>
+        </div>
+        <span class="splash-pct" id="barPct">0%</span>
+      </div>
+      <p class="splash-hint" id="hintText">正在初始化…</p>
+    </div>
+  </div>
+
+  <script>
+    const hints = [
+      '正在初始化引擎…',
+      '加载压缩模块…',
+      '准备解压组件…',
+      '校验安全沙箱…',
+      '就绪',
+    ];
+
+    let hintIdx = 0;
+    let prevPct = 0;
+
+    window.electronAPI.onSplashProgress((pct) => {
+      const fill = document.getElementById('barFill');
+      const pctEl = document.getElementById('barPct');
+      const hint = document.getElementById('hintText');
+
+      const p = Math.round(pct);
+      fill.style.width = p + '%';
+      pctEl.textContent = p + '%';
+
+      // 更新提示文字
+      const newIdx = Math.min(Math.floor(p / 25), hints.length - 1);
+      if (newIdx !== hintIdx) {
+        hintIdx = newIdx;
+        hint.style.opacity = '0';
+        setTimeout(() => {
+          hint.textContent = hints[hintIdx];
+          hint.style.opacity = '1';
+        }, 180);
+      }
+    });
+
+    window.electronAPI.onSplashComplete(() => {
+      const splash = document.getElementById('splash');
+      splash.style.opacity = '0';
+      splash.style.transform = 'scale(0.96)';
+    });
+  </script>
+</body>
+</html>

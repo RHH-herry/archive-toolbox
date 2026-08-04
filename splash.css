@@ -1,0 +1,205 @@
+/* ===== 液态玻璃启动画面 — iPhone Liquid Glass 95% ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+               "PingFang SC", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-app-region: drag;
+}
+
+/* === 主体容器：液态玻璃（更实） === */
+.liquid-glass {
+  position: relative;
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 28px;
+  overflow: hidden;
+
+  /* 液态玻璃：更实、更干净 */
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 15%, rgba(160,200,245,0.55), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(120,210,190,0.35), transparent 55%),
+    linear-gradient(165deg,
+      #c8dff5 0%,
+      #b0cee8 25%,
+      #a0c4de 50%,
+      #b0d4d0 75%,
+      #b8ddd6 100%
+    );
+
+  backdrop-filter: blur(30px) saturate(1.6);
+  -webkit-backdrop-filter: blur(30px) saturate(1.6);
+
+  box-shadow:
+    inset 0 0 0 0.5px rgba(255,255,255,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    inset 0 -1px 0 rgba(255,255,255,0.25);
+
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+/* === 背景光晕动画 === */
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  pointer-events: none;
+  animation: glowDrift 6s ease-in-out infinite alternate;
+}
+.glow-1 {
+  width: 280px; height: 280px;
+  top: -60px; left: -40px;
+  background: radial-gradient(circle, rgba(140,190,255,0.50), transparent 70%);
+  animation-delay: 0s;
+}
+.glow-2 {
+  width: 200px; height: 200px;
+  bottom: -30px; right: -20px;
+  background: radial-gradient(circle, rgba(100,200,220,0.35), transparent 70%);
+  animation-delay: -2s;
+}
+.glow-3 {
+  width: 100px; height: 100px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+  animation: glowPulse 5s ease-in-out infinite alternate;
+  animation-delay: -1s;
+}
+
+@keyframes glowDrift {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(30px, 20px) scale(1.15); }
+}
+@keyframes glowPulse {
+  0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); }
+  100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* === 内容 === */
+.splash-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  animation: contentFadeIn 0.8s ease both;
+}
+
+@keyframes contentFadeIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* === 图标：液态玻璃圆形容器 === */
+.splash-icon-wrap {
+  position: relative;
+  width: 100px; height: 100px;
+  margin-bottom: 6px;
+}
+
+.splash-icon {
+  width: 100px; height: 100px;
+  border-radius: 30px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+
+  background:
+    radial-gradient(ellipse 70% 65% at 30% 25%, rgba(255,255,255,0.50), transparent 60%),
+    linear-gradient(145deg, #7daaf0, #5b8ee0 50%, #4a7ad0);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.45),
+    inset 0 -3px 8px rgba(0,0,0,0.15),
+    0 12px 30px rgba(70,130,220,0.35),
+    0 4px 12px rgba(0,0,0,0.10);
+
+  animation: iconFloat 3.2s ease-in-out infinite;
+}
+
+.splash-icon svg {
+  width: 52px; height: 52px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* === 标题文字 === */
+.splash-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.95);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.10);
+  margin-top: 2px;
+}
+
+.splash-sub {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-top: -2px;
+}
+
+/* === 进度条（液态玻璃风格） === */
+.splash-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 240px;
+  margin-top: 14px;
+}
+
+.splash-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.20);
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.splash-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #b8d4ff, #fff);
+  background-size: 200% 100%;
+  animation: barShine 1.2s linear infinite;
+  transition: width 0.25s ease;
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+
+@keyframes barShine {
+  from { background-position: 0 0; }
+  to { background-position: 200% 0; }
+}
+
+.splash-pct {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  width: 38px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* === 提示文字 === */
+.splash-hint {
+  font-size: 12px;
+  color: rgba(255,255,255,0.50);
+  letter-spacing: 0.3px;
+  transition: opacity 0.2s ease;
+  margin-top: 4px;
+}
+
+/* 无底部边缘光 — 干干净净只有圆面 */

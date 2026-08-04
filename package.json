@@ -1,0 +1,47 @@
+{
+  "name": "archive-tool",
+  "version": "1.0.0",
+  "description": "归档 · 压缩与解压 — 纯本地文件归档工具",
+  "author": "归档工具",
+  "repository": "https://github.com/RHH-herry/archive-toolbox",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "pack": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "com.archive.tool",
+    "productName": "归档",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "splash.html",
+      "styles.css",
+      "splash.css",
+      "app.js",
+      "vendor/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": null,
+      "artifactName": "${productName}-${version}-setup.${ext}"
+    },
+    "publish": null,
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "归档"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
