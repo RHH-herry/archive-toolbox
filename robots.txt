@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rhh-herry.github.io/archive-toolbox/sitemap.xml

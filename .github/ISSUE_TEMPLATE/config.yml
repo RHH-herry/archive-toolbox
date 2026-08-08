@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 使用问题与讨论
+    url: https://github.com/RHH-herry/archive-toolbox/discussions
+    about: 不确定是不是 Bug？想问怎么用？到讨论区聊
+  - name: 🔒 报告安全漏洞
+    url: https://github.com/RHH-herry/archive-toolbox/blob/main/SECURITY.md
+    about: 安全问题请勿公开提交，按安全策略私下披露
+  - name: 📖 使用文档
+    url: https://github.com/RHH-herry/archive-toolbox#readme
+    about: 先看看 README，大部分问题这里有答案
+  - name: 🌐 在线体验
+    url: https://rhh-herry.github.io/archive-toolbox/
+    about: 不用安装，浏览器直接试
