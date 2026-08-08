@@ -29,8 +29,8 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": null,
-      "artifactName": "${productName}-${version}-setup.${ext}"
+      "icon": "build/icons/icon.ico",
+      "artifactName": "ArchiveTool-Setup-${version}.${ext}"
     },
     "publish": null,
     "nsis": {

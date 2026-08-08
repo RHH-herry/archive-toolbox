@@ -1,7 +1,7 @@
 # 依赖与构建产物
 node_modules/
 dist/
-build/
+build/dist/
 *.log
 
 # 系统 / 编辑器
