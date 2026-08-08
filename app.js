@@ -614,6 +614,8 @@
     if (splitFile) setSplitFile(splitFile);
   });
 
+  /* 改进（v1.0.0 正式版）：拆分优先写入所选文件夹（与解压一致的 File System Access API 路径），
+     浏览器不支持时回退为逐一下载。避免一次性触发大量下载被浏览器拦截。 */
   $('#splitBtn').addEventListener('click', async () => {
     if (!splitFile) return;
     const count = Math.ceil(splitFile.size / splitSize);
@@ -622,19 +624,35 @@
     const prog = $('#splitProgress'); prog.hidden = false;
     const fill = $('#splitFill'); const pct = $('#splitPct');
     const base = splitFile.name;
+    const supportsFSA = typeof window.showDirectoryPicker === 'function';
     try {
+      let outDir = null;
+      if (supportsFSA) {
+        try { outDir = await window.showDirectoryPicker(); }
+        catch (e) { if (e.name === 'AbortError') { prog.hidden = true; return; } }
+      }
       for (let i = 0; i < count; i++) {
         const start = i * splitSize;
         const end = Math.min(splitFile.size, start + splitSize);
         const part = splitFile.slice(start, end);
         const num = String(i + 1).padStart(3, '0');
-        downloadBlob(part, base + '.part.' + num);
+        const name = base + '.part.' + num;
+        if (outDir) {
+          const fh = await outDir.getFileHandle(name, { create: true });
+          const w = await fh.createWritable();
+          await w.write(part);
+          await w.close();
+        } else {
+          downloadBlob(part, name);
+          await new Promise((r) => setTimeout(r, 140)); // 让浏览器逐个开始下载
+        }
         const p = Math.round(((i + 1) / count) * 100);
         fill.style.width = p + '%'; pct.textContent = p + '%';
-        await new Promise((r) => setTimeout(r, 140)); // 让浏览器逐个开始下载
       }
       fill.classList.add('done');
-      toast(`已生成 ${count} 个分卷（${base}.part.001 … .part.${String(count).padStart(3, '0')}）`);
+      toast(outDir
+        ? `已写入 ${count} 个分卷到所选文件夹（${base}.part.001 … .part.${String(count).padStart(3, '0')}）`
+        : `已生成 ${count} 个分卷（${base}.part.001 … .part.${String(count).padStart(3, '0')}）`);
     } catch (err) {
       toast('拆分失败：' + err.message, 'err');
     } finally {
