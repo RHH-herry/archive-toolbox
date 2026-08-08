@@ -1,0 +1,15 @@
+{
+  "product": "归档 · 压缩与解压",
+  "productId": "archive-toolbox",
+  "version": "1.0.0",
+  "channel": "stable",
+  "edition": "正式版 / Official Release",
+  "build": "2026.08.08.001",
+  "serial": "AT-1.0.0-20260808-001",
+  "releaseDate": "2026-08-08",
+  "commit": "755e4a8",
+  "minimumOS": "Windows 10+ / macOS 11+ / 任意现代浏览器 (Chrome / Edge / Firefox / Safari)",
+  "supportedFormats": ["ZIP"],
+  "official": true,
+  "notes": "纯本地处理，零上传。功能：ZIP 压缩(四级)/解压(树形浏览·直写文件夹)/MD5·SHA-1·SHA-256·SHA-512 校验/分卷拆分与合并/最近记录/深浅主题。"
+}
