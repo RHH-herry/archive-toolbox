@@ -17,12 +17,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['20', '22']
+        # jsdom 30 的 engines 为 ^22.22.2 || ^24.15.0 || >=26.0.0，不支持 Node 20
+        node: ['22', '24']
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: 安装 Node ${{ matrix.node }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: npm
@@ -39,9 +40,9 @@ jobs:
     name: 静态检查
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -51,13 +52,27 @@ jobs:
             node --check "$f" && echo "OK  $f"
           done
 
-      - name: 确认没有外部 CDN 引用
+      - name: 确认没有外部资源加载
         run: |
-          if grep -rnE '(src|href)="https?://' index.html splash.html; then
-            echo "::error::检测到外部资源引用，违反零外部请求原则"
+          # 只检查真正会发起网络请求的标签，元数据链接（canonical / og:url / JSON-LD）不算
+          FOUND=0
+          if grep -nE '<(script|img|iframe|source|video|audio)[^>]*src="https?://' index.html splash.html; then FOUND=1; fi
+          if grep -nE '<link[^>]*rel="(stylesheet|preload|prefetch|modulepreload)"[^>]*href="https?://' index.html splash.html; then FOUND=1; fi
+          if grep -nE '@import[[:space:]]+(url\()?"?https?://' styles.css splash.css; then FOUND=1; fi
+          if [ "$FOUND" = "1" ]; then
+            echo "::error::检测到外部资源加载，违反零外部请求原则"
             exit 1
           fi
-          echo "OK 无外部资源引用"
+          echo "OK 无外部资源加载"
+
+      - name: 确认无遥测代码
+        run: |
+          if grep -rnE '(google-analytics|googletagmanager|sentry\.io|hotjar|mixpanel|hm\.baidu\.com|umami|plausible\.io)' \
+               app.js main.js preload.js index.html splash.html; then
+            echo "::error::检测到遥测/分析代码"
+            exit 1
+          fi
+          echo "OK 无遥测代码"
 
       - name: 确认 Electron 安全基线
         run: |

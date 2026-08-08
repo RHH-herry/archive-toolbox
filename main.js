@@ -12,6 +12,25 @@ const FORCE_SHOW_MS = 6000;  // 无论加载如何，超时强制显示主窗口
 /* 性能说明：不在此禁用硬件加速——真机有 GPU 时渲染更流畅。
    仅当在无桌面/虚拟机会话（headless）中调试时，用命令行参数 --disable-gpu 临时关闭。 */
 
+/* ---------------- 透明窗口兼容开关 ----------------
+   背景：主窗口默认使用 transparent:true 实现「只留圆角、下方无衬垫」的外观，
+   但少数显卡/驱动组合下透明窗口会出现黑边、闪烁或整窗不可见。
+   历史上曾为此改回不透明（9fe8083），后为恢复圆角外观又改了回来（fbd2571），
+   等于把该兼容性问题重新引入。这里不再二选一，改为：默认保留圆角视觉，
+   遇到渲染异常的用户可用 --opaque 启动参数（或环境变量 ARCHIVE_OPAQUE=1）
+   切换为不透明模式，无需重装或改代码。 */
+const OPAQUE_MODE =
+  process.argv.includes('--opaque') || process.env.ARCHIVE_OPAQUE === '1';
+
+// 不透明模式下的窗口底色，需与 styles.css 的浅色背景一致，避免出现白闪
+const OPAQUE_BG = '#fdfeff';
+
+function surfaceOptions() {
+  return OPAQUE_MODE
+    ? { transparent: false, backgroundColor: OPAQUE_BG }
+    : { transparent: true, backgroundColor: '#00000000' };
+}
+
 /* ---------------- 启动动画窗口（透明，圆角玻璃面，无阴影垫） ---------------- */
 function createSplash() {
   splashShownAt = Date.now();
@@ -24,8 +43,7 @@ function createSplash() {
     show: false,
     skipTaskbar: true,
     center: true,
-    transparent: true,
-    backgroundColor: '#00000000',
+    ...surfaceOptions(),
     hasShadow: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -85,8 +103,8 @@ function createMain() {
     frame: false,
     show: false,
     // 透明窗口 + 前端圆角外壳（.window 圆角 + 无投影）→ 真正"只要圆角、下面无垫"
-    transparent: true,
-    backgroundColor: '#00000000',
+    // 用 --opaque / ARCHIVE_OPAQUE=1 可切换为不透明，规避个别驱动的渲染异常
+    ...surfaceOptions(),
     hasShadow: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -103,21 +121,18 @@ function createMain() {
   mainWin.on('maximize', sendMaxState);
   mainWin.on('unmaximize', sendMaxState);
 
-  // 窗口控制
-  ipcMain.on('win:min', (e) => e.sender.getOwnerBrowserWindow().minimize());
-  ipcMain.on('win:max', (e) => {
-    const w = e.sender.getOwnerBrowserWindow();
-    if (w.isMaximized()) w.unmaximize();
-    else w.maximize();
-  });
-  ipcMain.on('win:close', (e) => e.sender.getOwnerBrowserWindow().close());
-
   // 加载进度 → splash 进度条
   mainWin.webContents.on('did-start-loading', () => sendSplash(30));
   mainWin.webContents.on('dom-ready', () => sendSplash(60));
   mainWin.webContents.on('did-finish-load', () => {
     sendSplash(88);
     sendMaxState();
+    // 不透明模式：窗口本身是矩形，去掉前端圆角避免四角露出底色形成"假圆角"
+    if (OPAQUE_MODE) {
+      mainWin.webContents
+        .insertCSS('.window{border-radius:0 !important}html,body{background:' + OPAQUE_BG + ' !important}')
+        .catch(() => {});
+    }
   });
 
   // 三重兜底：任一先到即显示主窗口
@@ -130,11 +145,60 @@ function createMain() {
   return mainWin;
 }
 
-app.whenReady().then(() => {
-  createSplash();
-  createMain();
-});
+/* ---------------- 窗口控制 IPC（全局只注册一次） ----------------
+   使用官方文档化的 BrowserWindow.fromWebContents()，而不是 webContents 上
+   那个未文档化的 owner-window 取窗口方法，避免 Electron 升级时被移除。
+   注册在 createMain() 之外，防止窗口重建时监听器重复叠加。 */
+function registerWindowControls() {
+  const ownerOf = (e) => BrowserWindow.fromWebContents(e.sender);
+
+  ipcMain.on('win:min', (e) => {
+    const w = ownerOf(e);
+    if (w && !w.isDestroyed()) w.minimize();
+  });
+
+  ipcMain.on('win:max', (e) => {
+    const w = ownerOf(e);
+    if (!w || w.isDestroyed()) return;
+    if (w.isMaximized()) w.unmaximize();
+    else w.maximize();
+  });
+
+  ipcMain.on('win:close', (e) => {
+    const w = ownerOf(e);
+    if (w && !w.isDestroyed()) w.close();
+  });
+}
+
+/* 单实例锁：避免重复启动出现多个主窗口 */
+const gotLock = app.requestSingleInstanceLock();
+if (!gotLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    if (mainWin && !mainWin.isDestroyed()) {
+      if (mainWin.isMinimized()) mainWin.restore();
+      mainWin.focus();
+    }
+  });
+
+  app.whenReady().then(() => {
+    registerWindowControls();
+    createSplash();
+    createMain();
+  });
+}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
+});
+
+/* macOS：点击 Dock 图标且没有窗口时重新打开主窗口 */
+app.on('activate', () => {
+  if (BrowserWindow.getAllWindows().length === 0) {
+    mainRevealed = false;
+    splashShownAt = Date.now();
+    createMain();
+    if (mainWin && !mainWin.isDestroyed()) mainWin.show();
+  }
 });

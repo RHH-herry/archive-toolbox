@@ -82,6 +82,24 @@ cd archive-toolbox
 
 到 [Releases](https://github.com/RHH-herry/archive-toolbox/releases/latest) 下载 NSIS 中文安装向导版。含开始菜单 / 桌面快捷方式，可正常卸载。
 
+## 🩺 故障排除 / Troubleshooting
+
+**窗口出现黑边、闪烁，或整个窗口不显示？**
+
+桌面版默认使用透明窗口来实现「只留圆角、下方无衬垫」的外观。少数显卡 / 驱动组合对透明窗口支持不佳。用**不透明模式**启动即可：
+
+```bat
+:: 方式一：命令行参数
+"%LOCALAPPDATA%\Programs\归档\归档.exe" --opaque
+
+:: 方式二：环境变量（对所有启动方式生效）
+setx ARCHIVE_OPAQUE 1
+```
+
+也可以右键桌面快捷方式 → 属性 → 在「目标」末尾加上一个空格和 `--opaque`。
+
+**窗口在虚拟机 / 远程桌面里渲染异常？** 追加 `--disable-gpu` 关闭硬件加速。
+
 ## 🌍 浏览器支持 / Browser Support
 
 | 浏览器 | 压缩 / 解压 | 直写文件夹 | 说明 |
