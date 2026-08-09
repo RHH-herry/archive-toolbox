@@ -6,7 +6,7 @@
 
 *A ZIP tool that never uploads your files. Everything runs in your browser.*
 
-[![Version](https://img.shields.io/badge/version-1.0.0-3b82f6?style=flat-square)](https://github.com/RHH-herry/archive-toolbox/releases/latest)
+[![Version](https://img.shields.io/badge/version-1.0.1-3b82f6?style=flat-square)](https://github.com/RHH-herry/archive-toolbox/releases/latest)
 [![License](https://img.shields.io/badge/license-MIT-22c55e?style=flat-square)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/RHH-herry/archive-toolbox/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/RHH-herry/archive-toolbox/actions)
 [![Tests](https://img.shields.io/badge/tests-42%20passing-22c55e?style=flat-square)](test/functional.js)
@@ -16,6 +16,10 @@
 ### [🌐 立即在线体验](https://rhh-herry.github.io/archive-toolbox/) · [⬇️ 下载 Windows 桌面版](https://github.com/RHH-herry/archive-toolbox/releases/latest)
 
 </div>
+
+<p align="center">
+  <img src="screenshots/homepage.png" alt="归档工具界面截图 — 压缩 / 解压 / 校验 / 拆分合并" width="800" />
+</p>
 
 ---
 
