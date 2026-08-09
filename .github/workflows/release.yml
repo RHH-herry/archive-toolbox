@@ -49,7 +49,7 @@ jobs:
             $lines += "$hash  $($f.Name)"
             Write-Host "$hash  $($f.Name)"
           }
-          $lines -join "`n" | Out-File -FilePath dist/checksums.sha256 -Encoding ascii -NoNewline
+          $lines -join "`n" | Out-File -FilePath dist/checksums.sha256 -Encoding utf8 -NoNewline
 
       - name: 列出产物
         shell: pwsh
