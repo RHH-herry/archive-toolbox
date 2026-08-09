@@ -1,6 +1,6 @@
 {
   "name": "archive-tool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "归档 · 压缩与解压 — 纯本地文件归档工具",
   "author": "归档工具",
   "repository": "https://github.com/RHH-herry/archive-toolbox",
