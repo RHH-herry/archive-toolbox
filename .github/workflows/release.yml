@@ -56,7 +56,7 @@ jobs:
         run: Get-ChildItem -Path dist | Format-Table Name, Length
 
       - name: 上传构建产物
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: windows-installer
           path: |
